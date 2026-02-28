@@ -19,8 +19,8 @@ class OrderBookTestCase(unittest.TestCase):
         assert(self.book.mid_price() == None)
 
     def testOrderBook(self):
-        id1 = self.book.add_limit_order(self.bid, 99, 1)
-        id2 = self.book.add_limit_order(self.ask, 101, 1)
+        self.book.add_limit_order(self.bid, 99, 1)
+        self.book.add_limit_order(self.ask, 101, 1)
 
         assert(self.book.best_bid() == 99)
         assert(self.book.best_ask() == 101)
