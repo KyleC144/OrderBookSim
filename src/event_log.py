@@ -6,8 +6,7 @@ Converts raw lists into pandas DataFrames for easy analysis and plotting.
 """
 
 import pandas as pd
-import numpy as np
-from orderBook import OrderBook, EventType
+from orderBook import OrderBook
 
 
 # ─────────────────────────────────────────────
@@ -157,14 +156,14 @@ if __name__ == "__main__":
 
     book = OrderBook("AAPL")
     sim  = OrderFlowSimulator(book, SimulatorConfig(seed=42))
-    sim.run(10)
+    sim.run(1000)
 
     print_summary(book)
 
     print()
     print("── Fill DataFrame (head) ───────────────────")
-    print(fills_to_df(book).head(10).to_string(index=False))
+    print(fills_to_df(book).head(10))
 
     print()
     print("── Volume Profile ──────────────────────────")
-    print(volume_profile(book, bins=10).to_string(index=False))
+    print(volume_profile(book, bins=10))
