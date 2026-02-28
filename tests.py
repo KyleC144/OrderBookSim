@@ -1,8 +1,7 @@
 import unittest
-from orderBook import OrderBook, Side
+from src.orderBook import OrderBook, Side
 
 class OrderBookTestCase(unittest.TestCase):
-
     def setUp(self):
         ticker = "SPY"
         self.book = OrderBook(ticker)
