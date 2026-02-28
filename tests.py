@@ -1,6 +1,5 @@
 import unittest
-from orderBook import OrderBook
-from order import Side, Order, OrderType
+from orderBook import OrderBook, Side
 
 class OrderBookTestCase(unittest.TestCase):
 
@@ -29,8 +28,8 @@ class OrderBookTestCase(unittest.TestCase):
         assert(self.book.mid_price() == 100)
     
     def testOrderBookCancel(self):
-        id1 = self.book.add_limit_order(self.bid, 99, 1)
-        id2 = self.book.add_limit_order(self.ask, 101, 1)
+        id1, _ = self.book.add_limit_order(self.bid, 99, 1)
+        id2, _ = self.book.add_limit_order(self.ask, 101, 1)
 
         assert(self.book.best_bid() == 99)
         assert(self.book.best_ask() == 101)
@@ -44,7 +43,7 @@ class OrderBookTestCase(unittest.TestCase):
         assert(self.book.spread() == None)
         assert(self.book.mid_price() == None)
 
-    
+
 
 if __name__ == '__main__':
     unittest.main()
