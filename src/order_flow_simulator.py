@@ -80,7 +80,6 @@ class OrderFlowSimulator:
         self.spread_history.append(self.book.spread())
 
     def run(self, n_steps: int):
-        """Run the simulator for n_steps steps."""
         for _ in range(n_steps):
             self.step()
 
@@ -120,8 +119,8 @@ class OrderFlowSimulator:
         self.book.add_market_order(side, qty)
 
     def _cancel_random(self):
-        idx    = self.rng.integers(len(self._resting_ids))
-        oid    = self._resting_ids.pop(idx)
+        idx = self.rng.integers(len(self._resting_ids))
+        oid = self._resting_ids.pop(idx)
         self.book.cancel_order(oid)
 
     # ── Summary ────────────────────────────────

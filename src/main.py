@@ -14,10 +14,10 @@ def main():
         market_arrive_prob = 0.25,
         cancel_prob        = 0.15,
         seed               = 43,
-        informed_fraction  = 0.5
+        informed_fraction  = 0.1
     )
 
-    spreads = [0.10, 0.15, 0.20, 0.30, 0.40]
+    spreads = [0.10, 0.15, 0.20, 0.25, 0.30]
     skews = [0.001, 0.005, 0.01, 0.05, 0.10]
 
     df = pd.DataFrame(columns=spreads, index=skews)
@@ -30,10 +30,10 @@ def main():
                 base_spread    = spread,
                 quote_size     = 5.0,
                 inventory_skew = skew,
-                max_inventory  = 5.0,
+                max_inventory  = 100.0,
             ))
 
-            N = 2000
+            N = 3000
             for _ in range(N):
                 sim.step()
                 mm.step(mark_price=sim._true_price)
@@ -42,7 +42,7 @@ def main():
     df = df.astype(float)
     # print(df)
     sns.heatmap(df, annot=True)
-    plt.xlabel("skew")
+    plt.ylabel("skew")
     plt.xlabel("bid-ask spread")
     plt.show()
     

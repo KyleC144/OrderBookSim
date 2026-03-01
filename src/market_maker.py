@@ -220,13 +220,13 @@ if __name__ == "__main__":
         market_arrive_prob = 0.25,
         cancel_prob        = 0.15,
         seed               = 43,
-        informed_fraction  = 0.0
+        informed_fraction  = 1.0
     ))
     mm = MarketMaker(book, MarketMakerConfig(
         base_spread    = 0.15,
         quote_size     = 5.0,
         inventory_skew = 0.01,
-        max_inventory  = 5.0,
+        max_inventory  = 10.0,
     ))
 
     N = 10000
