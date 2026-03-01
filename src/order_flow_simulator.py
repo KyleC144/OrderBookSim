@@ -84,22 +84,27 @@ class OrderFlowSimulator:
         cfg = self.config
         rng = self.rng
 
-        # 1. Evolve true price (random walk)
-        self._true_price += rng.normal(0, cfg.price_vol)
+        # 1. Pre-draw the price move — informed traders see direction,
+        #    but orders are placed BEFORE the price actually moves
+        price_move = rng.normal(0, cfg.price_vol)
 
-        # 2. Limit order arrival
+        # 2. Limit order arrival (against current stale quotes)
         if rng.random() < cfg.limit_arrive_prob:
             self._place_limit_order()
 
-        # 3. Market order arrival
+        # 3. Market order arrival — informed traders trade on the move
+        #    before it is reflected in the book
         if rng.random() < cfg.market_arrive_prob:
-            self._place_market_order()
+            self._place_market_order(price_move)
 
         # 4. Random cancellation
         if rng.random() < cfg.cancel_prob and self._resting_ids:
             self._cancel_random()
 
-        # 5. Snapshot
+        # 5. Price moves AFTER orders are placed
+        self._true_price += price_move
+
+        # 6. Snapshot
         self.true_price_history.append(self._true_price)
         self.mid_price_history.append(self.book.mid_price())
         self.spread_history.append(self.book.spread())
@@ -130,16 +135,15 @@ class OrderFlowSimulator:
         if oid in self.book.orders:
             self._resting_ids.append(oid)
 
-    def _place_market_order(self):
+    def _place_market_order(self, price_move: float):
         cfg = self.config
         rng = self.rng
 
-        # Informed traders trade in direction of next price move
         if rng.random() < cfg.informed_fraction:
-            # peek at "true" direction: if price drifted up, buy; else sell
-            drift = rng.normal(0, cfg.price_vol)
-            side  = Side.BID if drift > 0 else Side.ASK
+            # Informed: trade in the direction of the actual price move this step
+            side = Side.BID if price_move > 0 else Side.ASK
         else:
+            # Uninformed: random direction
             side = Side.BID if rng.random() < 0.5 else Side.ASK
 
         qty = int(rng.integers(cfg.market_qty_min, cfg.market_qty_max + 1))

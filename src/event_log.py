@@ -1,10 +1,3 @@
-"""
-event_log.py
-────────────
-Utilities for querying and analyzing the OrderBook event and fill logs.
-Converts raw lists into pandas DataFrames for easy analysis and plotting.
-"""
-
 import pandas as pd
 from orderBook import OrderBook
 
