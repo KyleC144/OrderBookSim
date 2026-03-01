@@ -1,23 +1,7 @@
-"""
-order_flow_simulator.py
-────────────────────────
-Drives the OrderBook with synthetic order flow modelled as a Poisson process.
-
-Arrival rates and price dynamics are configurable. The true (fundamental) price
-follows a discrete random walk; limit orders are placed around it with
-exponentially-distributed offsets, and market orders arrive at a lower rate.
-A random fraction of resting orders are cancelled each step.
-"""
-
 import numpy as np
 from dataclasses import dataclass, field
 
 from orderBook import OrderBook, Side
-
-
-# ─────────────────────────────────────────────
-#  Config
-# ─────────────────────────────────────────────
 
 @dataclass
 class SimulatorConfig:
@@ -45,21 +29,7 @@ class SimulatorConfig:
 
     seed: int = 42
 
-
-# ─────────────────────────────────────────────
-#  Simulator
-# ─────────────────────────────────────────────
-
 class OrderFlowSimulator:
-    """
-    Injects synthetic order flow into an OrderBook.
-
-    Parameters
-    ----------
-    book   : OrderBook  — the book to drive
-    config : SimulatorConfig  — arrival rate / price parameters
-    """
-
     def __init__(self, book: OrderBook, config: SimulatorConfig | None = None):
         self.book   = book
         self.config = config or SimulatorConfig()
@@ -170,11 +140,6 @@ class OrderFlowSimulator:
             "total_fills":      len(self.book.fills),
             "total_events":     len(self.book.events),
         }
-
-
-# ─────────────────────────────────────────────
-#  Smoke test
-# ─────────────────────────────────────────────
 
 if __name__ == "__main__":
     book = OrderBook("AAPL")

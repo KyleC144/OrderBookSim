@@ -4,11 +4,6 @@ from collections import deque
 from sortedcontainers import SortedDict
 import time
 
-
-# ─────────────────────────────────────────────
-#  Enums
-# ─────────────────────────────────────────────
-
 class Side(Enum):
     BID = "bid"
     ASK = "ask"
@@ -31,11 +26,6 @@ class EventType(Enum):
     MARKET_PLACED = "market_placed"
     FILL          = "fill"
     CANCEL        = "cancel"
-
-
-# ─────────────────────────────────────────────
-#  Dataclasses
-# ─────────────────────────────────────────────
 
 @dataclass
 class Order:
@@ -96,10 +86,6 @@ class Event:
             f"mid={round(self.mid_price, 4) if self.mid_price else None})"
         )
 
-
-# ─────────────────────────────────────────────
-#  Order Book
-# ─────────────────────────────────────────────
 
 class OrderBook:
     def __init__(self, symbol: str):
@@ -320,10 +306,6 @@ class OrderBook:
             lines.append(f"    {price:>10.4f}  {qty:>8.2f}")
         return "\n".join(lines)
 
-
-# ─────────────────────────────────────────────
-#  Smoke test
-# ─────────────────────────────────────────────
 
 if __name__ == "__main__":
     book = OrderBook("AAPL")

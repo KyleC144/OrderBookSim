@@ -1,13 +1,7 @@
 import pandas as pd
 from orderBook import OrderBook
 
-
-# ─────────────────────────────────────────────
-#  DataFrame builders
-# ─────────────────────────────────────────────
-
 def fills_to_df(book: OrderBook) -> pd.DataFrame:
-    """Convert book.fills to a DataFrame."""
     if not book.fills:
         return pd.DataFrame()
     records = [
@@ -27,7 +21,6 @@ def fills_to_df(book: OrderBook) -> pd.DataFrame:
 
 
 def events_to_df(book: OrderBook) -> pd.DataFrame:
-    """Convert book.events to a DataFrame."""
     if not book.events:
         return pd.DataFrame()
     records = [
@@ -49,13 +42,7 @@ def events_to_df(book: OrderBook) -> pd.DataFrame:
     df["timestamp"] = pd.to_datetime(df["timestamp"], unit="s")
     return df
 
-
-# ─────────────────────────────────────────────
-#  Analysis helpers
-# ─────────────────────────────────────────────
-
 def mid_price_series(book: OrderBook) -> pd.Series:
-    """Return a time-indexed Series of mid prices from the event log."""
     df = events_to_df(book)
     if df.empty:
         return pd.Series(dtype=float)
@@ -64,7 +51,6 @@ def mid_price_series(book: OrderBook) -> pd.Series:
 
 
 def spread_series(book: OrderBook) -> pd.Series:
-    """Return a time-indexed Series of spreads from the event log."""
     df = events_to_df(book)
     if df.empty:
         return pd.Series(dtype=float)
@@ -73,7 +59,6 @@ def spread_series(book: OrderBook) -> pd.Series:
 
 
 def trade_price_series(book: OrderBook) -> pd.Series:
-    """Return a time-indexed Series of trade (fill) prices."""
     df = fills_to_df(book)
     if df.empty:
         return pd.Series(dtype=float)
@@ -81,10 +66,6 @@ def trade_price_series(book: OrderBook) -> pd.Series:
 
 
 def volume_profile(book: OrderBook, bins: int = 20) -> pd.DataFrame:
-    """
-    Compute volume traded at each price bin (market profile).
-    Returns a DataFrame with columns: price_bin, volume.
-    """
     df = fills_to_df(book)
     if df.empty:
         return pd.DataFrame()
@@ -98,7 +79,6 @@ def volume_profile(book: OrderBook, bins: int = 20) -> pd.DataFrame:
 
 
 def event_type_counts(book: OrderBook) -> pd.Series:
-    """Count of each event type."""
     df = events_to_df(book)
     if df.empty:
         return pd.Series(dtype=int)
@@ -106,7 +86,6 @@ def event_type_counts(book: OrderBook) -> pd.Series:
 
 
 def print_summary(book: OrderBook):
-    """Print a human-readable summary of book activity."""
     fills_df  = fills_to_df(book)
     events_df = events_to_df(book)
 
@@ -137,11 +116,6 @@ def print_summary(book: OrderBook):
         print(f"  Max spread      : {valid_spreads.max():.4f}")
     else:
         print("  No spread data.")
-
-
-# ─────────────────────────────────────────────
-#  Smoke test
-# ─────────────────────────────────────────────
 
 if __name__ == "__main__":
     from orderBook import OrderBook

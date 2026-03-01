@@ -1,12 +1,6 @@
 import numpy as np
 from dataclasses import dataclass
-
-from orderBook import OrderBook, Side, Fill
-
-
-# ─────────────────────────────────────────────
-#  Config
-# ─────────────────────────────────────────────
+from orderBook import OrderBook, Side
 
 @dataclass
 class MarketMakerConfig:
@@ -15,11 +9,6 @@ class MarketMakerConfig:
     inventory_skew: float = 0.01  # price shift per unit of net inventory
     max_inventory:  float = 50.0  # hard limit — stop quoting one side if breached
     requote_every:  int   = 1     # re-quote every N simulation steps
-
-
-# ─────────────────────────────────────────────
-#  P&L Snapshot
-# ─────────────────────────────────────────────
 
 @dataclass
 class MMSnapshot:
@@ -32,11 +21,6 @@ class MMSnapshot:
     realized_pnl:   float
     unrealized_pnl: float
     total_pnl:      float
-
-
-# ─────────────────────────────────────────────
-#  Market Maker
-# ─────────────────────────────────────────────
 
 class MarketMaker:
     def __init__(self, book: OrderBook, config: MarketMakerConfig | None = None):
@@ -236,16 +220,16 @@ if __name__ == "__main__":
         market_arrive_prob = 0.25,
         cancel_prob        = 0.15,
         seed               = 43,
-        informed_fraction  = 1
+        informed_fraction  = 0.0
     ))
     mm = MarketMaker(book, MarketMakerConfig(
-        base_spread    = 0.1,
+        base_spread    = 0.15,
         quote_size     = 5.0,
         inventory_skew = 0.01,
         max_inventory  = 5.0,
     ))
 
-    N = 2000
+    N = 10000
     for _ in range(N):
         sim.step()
         mm.step(mark_price=sim.true_price)
