@@ -160,3 +160,5 @@ if __name__ == "__main__":
     print()
     print("── Volume Profile ──────────────────────────")
     print(volume_profile(book, bins=10))
+
+    print(volume_profile(book, bins=10)["volume"].to_string(index=False))
